@@ -60,7 +60,7 @@ button {
 
 .task-list {
     max-width: 800px;
-    margin-top: 20px; /* Dodane */
+    margin-top: 20px; 
 }
 
 .task-list h1 {
@@ -128,10 +128,10 @@ button {
     }
 
     .input-container {
-        width: 100%; /* Zajmij całą dostępną szerokość na większych ekranach */
+        width: 100%; 
     }
 
     .task-list {
-        margin-top: 0; /* Usunięcie dodatkowego marginesu */
+        margin-top: 0; 
     }
 }
