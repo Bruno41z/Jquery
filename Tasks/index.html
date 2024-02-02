@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pl">
 
 <head>
@@ -5,18 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menedżer Zadań</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="ikona.png">
 </head>
 
 <body>
-    <div class="tasks">
-        <h1>Dodaj zadanie</h1>
-        <input type="text" id="taskInput" placeholder="Wprowadź zadanie">
-        <button onclick="addTask()">Dodaj zadanie</button>
-        <ul id="taskList"></ul>
+    <div class="container">
+        <div class="input-section">
+            <h1>Dodaj nowe zadanie</h1>
+            <div class="input-container">
+                <input type="text" id="taskTitleInput" placeholder="Wprowadź tytuł zadania">
+                <textarea id="taskDescriptionInput" placeholder="Wprowadź opis zadania"></textarea>
+                <input type="text" id="timeInput" placeholder="Czas (minuty)">
+                <button onclick="addTask()">Dodaj zadanie</button>
+            </div>
+        </div>
+
+        <div class="task-list">
+            <h1>Lista zadań</h1>
+            <ul id="taskList"></ul>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="script.js"></script>
+    <a href="https://pl.freepik.com/search?format=search&icon_color=solid-black&last_filter=page&last_value=3&page=3&shape=fill&type=icon#uuid=fc8faf0b-bc4b-442b-929d-ba3d0023caa1">Ikona autorstwa rashedul.islam</a>
 </body>
 
 </html>

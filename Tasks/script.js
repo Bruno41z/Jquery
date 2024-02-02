@@ -3,16 +3,33 @@ $(document).ready(function () {
 });
 
 function addTask() {
-    let taskInput = $('#taskInput');
-    let taskText = taskInput.val();
+    let taskTitleInput = $('#taskTitleInput');
+    let taskDescriptionInput = $('#taskDescriptionInput');
+    let timeInput = $('#timeInput');
+    let taskTitle = taskTitleInput.val();
+    let taskDescription = taskDescriptionInput.val();
+    let taskTime = parseInt(timeInput.val()) || 10;
 
-    if (taskText.trim() !== '') {
+    if (taskTitle.trim() !== '' && taskDescription.trim() !== '') {
         let taskList = $('#taskList');
-        let newTask = $('<li><span class="taskText">' + taskText + '</span><span class="close" onclick="removeTask(this)">×</span><span class="edit" onclick="editTask(this)">✎</span></li>');
+        let remainingTime = taskTime * 60;
+
+        let newTask = $(`
+            <li>
+                <span class="taskTitle">${taskTitle}</span>
+                <span class="description">${taskDescription}</span>
+                <span class="close" onclick="removeTask(this)">×</span>
+                <span class="edit" onclick="editTask(this)">✎</span>
+                <span class="timer">${formatTime(remainingTime)}</span>
+            </li>
+        `);
         taskList.append(newTask);
 
-        taskInput.val('');
+        taskTitleInput.val('');
+        taskDescriptionInput.val('');
+        timeInput.val('');
 
+        startTimer(newTask.find('.timer'), remainingTime);
         saveTasks();
     }
 }
@@ -23,30 +40,95 @@ function removeTask(element) {
 }
 
 function editTask(element) {
-    let taskText = $(element).siblings('.taskText').text();
-    let newText = prompt('Edytuj zadanie:', taskText);
+    let taskItem = $(element).parent();
+    let taskTitle = taskItem.find('.taskTitle');
+    let taskDescription = taskItem.find('.description');
+    let newTitleInput = $('<input type="text">').val(taskTitle.text());
+    let newDescriptionInput = $('<textarea></textarea>').val(taskDescription.text());
+    
+    taskTitle.replaceWith(newTitleInput);
+    taskDescription.replaceWith(newDescriptionInput);
 
-    if (newText !== null && newText.trim() !== '') {
-        $(element).siblings('.taskText').text(newText);
-        saveTasks();
-    }
+    newTitleInput.focus();
+
+    newTitleInput.blur(function () {
+        let newTitle = newTitleInput.val().trim();
+        let newDescription = newDescriptionInput.val().trim();
+        
+        if (newTitle !== '' && newDescription !== '') {
+            taskTitle.text(newTitle);
+            taskDescription.text(newDescription);
+            saveTasks();
+        } else {
+            taskItem.remove();
+            saveTasks();
+        }
+    });
+
+    newTitleInput.keypress(function (e) {
+        if (e.which === 13) {
+            newTitleInput.blur();
+        }
+    });
 }
 
 function displayTasks() {
     let taskList = $('#taskList');
     let storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-    storedTasks.forEach(function (taskText) {
-        let newTask = $('<li><span class="taskText">' + taskText + '</span><span class="close" onclick="removeTask(this)">×</span><span class="edit" onclick="editTask(this)">✎</span></li>');
+    storedTasks.forEach(function (task) {
+        let newTask = $(`
+            <li>
+                <span class="taskTitle">${task.title}</span>
+                <span class="description">${task.description}</span>
+                <span class="close" onclick="removeTask(this)">×</span>
+                <span class="edit" onclick="editTask(this)">✎</span>
+                <span class="timer">${formatTime(task.remainingTime)}</span>
+            </li>
+        `);
         taskList.append(newTask);
+
+        if (task.remainingTime > 0) {
+            startTimer(newTask.find('.timer'), task.remainingTime);
+        } else {
+            newTask.find('.timer').text('Czas minął');
+        }
     });
 }
 
 function saveTasks() {
-    let taskTexts = [];
-    $('#taskList .taskText').each(function () {
-        taskTexts.push($(this).text());
+    let taskArray = [];
+    $('#taskList li').each(function () {
+        let taskTitle = $(this).find('.taskTitle').text();
+        let taskDescription = $(this).find('.description').text();
+        let remainingTime = parseInt($(this).find('.timer').attr('data-remaining-time')) || 0;
+        taskArray.push({ title: taskTitle, description: taskDescription, remainingTime: remainingTime });
     });
 
-    localStorage.setItem('tasks', JSON.stringify(taskTexts));
+    localStorage.setItem('tasks', JSON.stringify(taskArray));
+}
+
+function startTimer(timerElement, remainingTime) {
+    function updateTimer() {
+        let minutes = Math.floor(remainingTime / 60);
+        let seconds = remainingTime % 60;
+
+        let formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        timerElement.text(formattedTime).attr('data-remaining-time', remainingTime);
+
+        if (remainingTime > 0) {
+            remainingTime--;
+            setTimeout(updateTimer, 1000);
+        } else {
+            timerElement.text('Czas minął');
+        }
+    }
+
+    updateTimer();
+}
+
+function formatTime(seconds) {
+    let minutes = Math.floor(seconds / 60);
+    let remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
 }
