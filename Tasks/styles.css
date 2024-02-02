@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #dbe5e5; 
+    background-color: #dbe5e5;
     color: #333;
     margin: 0;
     padding: 0;
@@ -21,12 +21,9 @@ body {
     border-radius: 10px;
     padding: 20px;
     margin-top: 20px;
-    width: 300px; 
+    max-width: 600px;
+    width: 90%;
     text-align: center;
-}
-
-.task-list {
-    width: 600px;
 }
 
 .input-container {
@@ -36,22 +33,22 @@ body {
 }
 
 h1 {
-    color: #005580; 
+    color: #005580;
     font-size: 1.5em;
 }
 
 #taskTitleInput,
 #taskDescriptionInput,
 #timeInput {
-    width: 80%;
+    width: 100%;
     padding: 8px;
     margin-top: 10px;
-    border: 1px solid #005580; 
+    border: 1px solid #005580;
     border-radius: 5px;
 }
 
 button {
-    background-color: #005580; 
+    background-color: #005580;
     color: #fff;
     padding: 8px 15px;
     margin-top: 10px;
@@ -61,8 +58,9 @@ button {
     transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #003366; 
+.task-list {
+    max-width: 800px;
+    margin-top: 20px; /* Dodane */
 }
 
 .task-list h1 {
@@ -76,7 +74,7 @@ button:hover {
 
 .task-list li {
     background-color: #fff;
-    border: 1px solid #005580; 
+    border: 1px solid #005580;
     margin-top: 10px;
     padding: 20px;
     border-radius: 10px;
@@ -84,7 +82,7 @@ button:hover {
 }
 
 .task-list li:hover {
-    background-color: #f2f2f2; 
+    background-color: #f2f2f2;
 }
 
 .task-list .close,
@@ -92,12 +90,12 @@ button:hover {
     font-size: 1.2em;
     cursor: pointer;
     margin-left: 8px;
-    color: #005580; 
+    color: #005580;
 }
 
 .task-list .close:hover,
 .task-list .edit:hover {
-    color: #003366; 
+    color: #003366;
 }
 
 .task-list .timer {
@@ -109,11 +107,31 @@ button:hover {
 .task-list .taskTitle {
     font-size: 1.2em;
     font-weight: bold;
-    color: #005580; 
+    color: #005580;
 }
 
 .task-list .description,
 .task-list .time {
     margin-top: 10px;
     color: #555;
+}
+
+@media only screen and (min-width: 768px) {
+    .container {
+        flex-direction: row;
+    }
+
+    .input-section,
+    .task-list {
+        margin-top: 0;
+        margin-right: 20px;
+    }
+
+    .input-container {
+        width: 100%; /* Zajmij całą dostępną szerokość na większych ekranach */
+    }
+
+    .task-list {
+        margin-top: 0; /* Usunięcie dodatkowego marginesu */
+    }
 }
